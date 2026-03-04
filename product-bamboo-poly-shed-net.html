@@ -39,8 +39,93 @@
       </ul>
     </nav>
     <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+<!-- MOBILE NAV OVERLAY -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+<nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-header">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">WG</div>
+      <div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd.</span></div>
+    </a>
+    <button class="nav-close" id="navClose" aria-label="Close navigation">&#x2715;</button>
+  </div>
+  <ul class="mobile-nav-list">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="solutions.html">Solutions</a></li>
+    <li class="mobile-nav-group">
+      <button class="mobile-nav-group-toggle">Products <span class="chevron">&#x25BE;</span></button>
+      <ul class="mobile-nav-sub">
+        <li><a href="product-bamboo-building-components.html">Bamboo Building Components</a></li>
+        <li><a href="product-bamboo-poly-shed-net.html">Bamboo Poly-Shed Net</a></li>
+        <li><a href="product-bamboo-farm-shed.html">Bamboo Farm Shed (BIY Kit)</a></li>
+        <li><a href="product-eco-lite.html">Eco-Lite &#x2013; Transit Living Units</a></li>
+        <li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li>
+      </ul>
+    </li>
+    <li class="mobile-nav-group">
+      <button class="mobile-nav-group-toggle">Portfolio <span class="chevron">&#x25BE;</span></button>
+      <ul class="mobile-nav-sub">
+        <li><a href="portfolio-conference-hall.html">Conference Hall &#x2013; Pench Tiger Resort</a></li>
+        <li><a href="portfolio-community-space.html">Community Space &#x2013; Snehanchal, Nagpur</a></li>
+        <li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival &#x2013; Arunachal Pradesh</a></li>
+        <li><a href="portfolio-farm-house.html">Farm House</a></li>
+        <li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li>
+      </ul>
+    </li>
+    <li><a href="bamboo-lab.html">Bamboo Lab</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+  <div class="mobile-nav-footer">
+    <a href="contact.html" class="btn btn-primary" style="width:100%;text-align:center;display:block">Get a Quote</a>
+  </div>
+</nav>
+
+<script>
+(function(){
+  var toggle = document.getElementById('navToggle');
+  var close  = document.getElementById('navClose');
+  var nav    = document.getElementById('mobileNav');
+  var overlay= document.getElementById('mobileNavOverlay');
+  var body   = document.body;
+
+  function openNav(){
+    nav.classList.add('open');
+    overlay.classList.add('open');
+    body.style.overflow = 'hidden';
+    toggle.setAttribute('aria-expanded','true');
+    nav.setAttribute('aria-hidden','false');
+  }
+  function closeNav(){
+    nav.classList.remove('open');
+    overlay.classList.remove('open');
+    body.style.overflow = '';
+    toggle.setAttribute('aria-expanded','false');
+    nav.setAttribute('aria-hidden','true');
+  }
+
+  toggle.addEventListener('click', openNav);
+  close.addEventListener('click', closeNav);
+  overlay.addEventListener('click', closeNav);
+
+  // Sub-menu toggles
+  document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sub = this.nextElementSibling;
+      var isOpen = sub.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.mobile-nav-sub').forEach(function(s){ s.classList.remove('open'); });
+      document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(b){ b.classList.remove('active'); });
+      if(!isOpen){ sub.classList.add('open'); this.classList.add('active'); }
+    });
+  });
+})();
+</script>
 
 <!-- PAGE HERO -->
 <div class="page-hero tall">
@@ -96,7 +181,8 @@
           <div class="vc-image wf-block h-sm" data-label="12 ft Span Panel Diagram"></div>
           <span class="variant-label">Span 12 ft</span>
           <h4>Panel Based — 12 ft Span</h4>
-          <table class="specs-table" style="margin-top:.75rem">
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+<table class="specs-table" style="margin-top:.75rem">
             <tbody>
               <tr><td>Span Width</td><td>12 ft (3.66 m)</td></tr>
               <tr><td>Bay Length</td><td>[ X ] ft per module</td></tr>
@@ -106,13 +192,15 @@
               <tr><td>Wind Load Capacity</td><td>[ X ] km/h</td></tr>
             </tbody>
           </table>
+</div>
         </div>
         <!-- Span 16 ft -->
         <div class="variant-card">
           <div class="vc-image wf-block h-sm" data-label="16 ft Span Panel Diagram"></div>
           <span class="variant-label">Span 16 ft</span>
           <h4>Panel Based — 16 ft Span</h4>
-          <table class="specs-table" style="margin-top:.75rem">
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+<table class="specs-table" style="margin-top:.75rem">
             <tbody>
               <tr><td>Span Width</td><td>16 ft (4.88 m)</td></tr>
               <tr><td>Bay Length</td><td>[ X ] ft per module</td></tr>
@@ -122,13 +210,15 @@
               <tr><td>Wind Load Capacity</td><td>[ X ] km/h</td></tr>
             </tbody>
           </table>
+</div>
         </div>
         <!-- Span 24 ft -->
         <div class="variant-card">
           <div class="vc-image wf-block h-sm" data-label="24 ft Span Panel Diagram"></div>
           <span class="variant-label">Span 24 ft</span>
           <h4>Panel Based — 24 ft Span</h4>
-          <table class="specs-table" style="margin-top:.75rem">
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+<table class="specs-table" style="margin-top:.75rem">
             <tbody>
               <tr><td>Span Width</td><td>24 ft (7.32 m)</td></tr>
               <tr><td>Bay Length</td><td>[ X ] ft per module</td></tr>
@@ -138,6 +228,7 @@
               <tr><td>Wind Load Capacity</td><td>[ X ] km/h</td></tr>
             </tbody>
           </table>
+</div>
         </div>
       </div>
     </div>
@@ -157,7 +248,8 @@
           <span class="variant-label">Span 24 ft</span>
           <h4>Truss Based — 24 ft Span</h4>
           <p style="font-size:.85rem;color:var(--mid);font-family:var(--font-ui);margin:.5rem 0 1rem">Clear internal span with no mid-span columns. Ideal for larger growing beds or machinery access.</p>
-          <table class="specs-table">
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+<table class="specs-table">
             <tbody>
               <tr><td>Clear Span Width</td><td>24 ft (7.32 m)</td></tr>
               <tr><td>Truss Spacing</td><td>[ X ] ft c/c</td></tr>
@@ -167,6 +259,7 @@
               <tr><td>Max Bay Length</td><td>[ X ] ft</td></tr>
             </tbody>
           </table>
+</div>
         </div>
         <!-- Span 36 ft -->
         <div class="variant-card">
@@ -174,7 +267,8 @@
           <span class="variant-label">Span 36 ft</span>
           <h4>Truss Based — 36 ft Span</h4>
           <p style="font-size:.85rem;color:var(--mid);font-family:var(--font-ui);margin:.5rem 0 1rem">Maximum clear span — suitable for large-scale protected cultivation, mushroom growing, or open event pavilions.</p>
-          <table class="specs-table">
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+<table class="specs-table">
             <tbody>
               <tr><td>Clear Span Width</td><td>36 ft (10.97 m)</td></tr>
               <tr><td>Truss Spacing</td><td>[ X ] ft c/c</td></tr>
@@ -184,6 +278,7 @@
               <tr><td>Max Bay Length</td><td>[ X ] ft</td></tr>
             </tbody>
           </table>
+</div>
         </div>
       </div>
     </div>
