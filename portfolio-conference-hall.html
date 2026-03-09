@@ -5,17 +5,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Conference cum Dining Hall – Pench Tiger Resort | Wonder Grass Initiative</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Portfolio Gallery ─────────────────────────────────────────────────── */
+    .port-hero-img {
+      width: 100%;
+      height: clamp(320px, 55vw, 640px);
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-top: 2rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+      transition: opacity .2s;
+    }
+    .gallery-grid img:hover { opacity: .88; cursor: zoom-in; }
+    .gallery-grid .span2 { grid-column: span 2; }
+    .gallery-grid .span2 img { aspect-ratio: 16/9; }
+
+    /* ── Process strip ─────────────────────────────────────────────────────── */
+    .process-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+      margin-top: 2rem;
+    }
+    .process-strip img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+    }
+    .process-phase {
+      margin-bottom: 2.5rem;
+    }
+    .process-phase h4 {
+      font-family: var(--font-ui);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+
+    /* ── Lightbox ──────────────────────────────────────────────────────────── */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem; right: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid .span2 { grid-column: span 1; }
+      .gallery-grid .span2 img { aspect-ratio: 4/3; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .span2 { grid-column: span 1; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ANNOUNCEMENT BAR -->
-  <div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote →</a></div>
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote →</a></div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-inner container">
-      <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd.</span></div></a>
-          <nav class="main-nav">
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd. &nbsp;·&nbsp; <em>the wonder that works.</em></span></div></a>
+    <nav class="main-nav">
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
@@ -42,9 +138,13 @@
         <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </nav>
-      <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
-    </div>
-  </header>
+    <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
 <!-- MOBILE NAV OVERLAY -->
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
@@ -94,32 +194,25 @@
   var nav    = document.getElementById('mobileNav');
   var overlay= document.getElementById('mobileNavOverlay');
   var body   = document.body;
-
   function openNav(){
-    nav.classList.add('open');
-    overlay.classList.add('open');
+    nav.classList.add('open'); overlay.classList.add('open');
     body.style.overflow = 'hidden';
     toggle.setAttribute('aria-expanded','true');
     nav.setAttribute('aria-hidden','false');
   }
   function closeNav(){
-    nav.classList.remove('open');
-    overlay.classList.remove('open');
+    nav.classList.remove('open'); overlay.classList.remove('open');
     body.style.overflow = '';
     toggle.setAttribute('aria-expanded','false');
     nav.setAttribute('aria-hidden','true');
   }
-
   toggle.addEventListener('click', openNav);
   close.addEventListener('click', closeNav);
   overlay.addEventListener('click', closeNav);
-
-  // Sub-menu toggles
   document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(btn){
     btn.addEventListener('click', function(){
       var sub = this.nextElementSibling;
       var isOpen = sub.classList.contains('open');
-      // Close all
       document.querySelectorAll('.mobile-nav-sub').forEach(function(s){ s.classList.remove('open'); });
       document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(b){ b.classList.remove('active'); });
       if(!isOpen){ sub.classList.add('open'); this.classList.add('active'); }
@@ -128,225 +221,308 @@
 })();
 </script>
 
-  <!-- PAGE HERO -->
-  <section class="page-hero tall">
-    <div class="page-hero-bg wf-block h-banner" data-label="Hero Image – Conference cum Dining Hall, Pench Tiger Reserve"></div>
-    <div class="page-hero-overlay"></div>
-    <div class="page-hero-content container">
-      <span class="eyebrow">Portfolio — Hospitality</span>
-      <h1>Conference cum Dining Hall</h1>
-      <p>A bamboo conference and dining pavilion nestled within the forest landscape of Pench Tiger Reserve.</p>
-      <p class="hero-meta">Restfo Pench Tiger Resort &nbsp;·&nbsp; Pench, Madhya Pradesh</p>
-    </div>
-  </section>
+<!-- HERO IMAGE — full bleed, no overlay text -->
+<div style="background:#1a1a1a;margin-top:0">
+  <img
+    src="images/portfolio/conference-hall/ccd-exterior-2.jpg"
+    alt="Conference cum Dining Hall exterior — bamboo structure with red roof at Restfo Pench Tiger Resort"
+    class="port-hero-img"
+    loading="eager"
+  />
+</div>
 
-  <!-- BREADCRUMB -->
-  <section class="section compact">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="index.html">Home</a> ›
-        <a href="#">Portfolio</a> ›
-        <span>Conference Hall – Pench Tiger Resort</span>
-      </nav>
-    </div>
-  </section>
+<!-- BREADCRUMB -->
+<section class="section compact">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="#">Portfolio</a> ›
+      <span>Conference Hall – Pench Tiger Resort</span>
+    </nav>
+  </div>
+</section>
 
-  <!-- PROJECT LAYOUT: Description + Info Box -->
-  <section class="section">
-    <div class="container">
-      <div class="project-layout">
+<!-- PROJECT OVERVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="project-layout">
 
-        <!-- LEFT: Description -->
-        <div class="project-main">
-          <h2>About the Project</h2>
-          <p>[ Description of the conference cum dining hall project. How the space was designed to blend into the tiger reserve landscape. How many guests it seats. The structural challenges of building in a remote forest location. The materials and finishes chosen to harmonise with the natural surroundings. How the bamboo components were prefabricated and transported to site. ]</p>
-          <p>[ Continue with additional context: the design philosophy, collaboration with the resort client, sustainability credentials, and how the hall functions as both a conference and dining space throughout the year. ]</p>
-          <p>[ Final paragraph: outcomes, guest experience, and how this project exemplifies Wonder Grass Initiative's capability to deliver large-span bamboo structures in remote, ecologically sensitive environments. ]</p>
+      <!-- LEFT: Description -->
+      <div class="project-main">
+        <span class="eyebrow">Portfolio — Hospitality</span>
+        <h1 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin:.5rem 0 1.25rem">Conference cum Dining Hall</h1>
+
+        <p>Nestled within the forest landscape of Pench Tiger Reserve, this conference cum dining pavilion was designed for Restfo Pench Tiger Resort — a hospitality property that needed a large gathering space that felt rooted in its jungle surroundings rather than imposed upon them.</p>
+
+        <p>The brief called for a structure that could accommodate both formal conferences and open-air dining, with an unobstructed internal span, natural materials, and a silhouette that complemented rather than competed with the forest canopy. Wonder Grass designed and delivered a full bamboo structural system — columns, beams, and a custom long-span truss roof — fabricated entirely off-site at the Nagpur workshop before being transported to Pench for assembly.</p>
+
+        <p>Building within a protected tiger reserve meant that on-site construction time, vehicle movements, and material waste had to be kept to an absolute minimum. All bamboo components were treated, dimensioned, numbered, and flat-packed in Nagpur so that the on-site team could assemble the structure rapidly and cleanly, with minimal disruption to the forest environment.</p>
+
+        <ul class="features-list" style="margin-top:1.25rem">
+          <li>Custom long-span bamboo truss system for column-free interior</li>
+          <li>Full off-site prefabrication — minimal on-site fabrication work</li>
+          <li>Treated bamboo for durability in the humid forest microclimate</li>
+          <li>Assembly designed for restricted vehicle access within the reserve</li>
+          <li>Natural finish palette harmonising with jungle surroundings</li>
+        </ul>
+      </div>
+
+      <!-- RIGHT: Project Info Box -->
+      <aside class="project-info-box">
+        <h4>Project Details</h4>
+        <div class="project-info-row">
+          <span class="project-info-label">Client</span>
+          <span class="project-info-value">Restfo Pench Tiger Resort</span>
         </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Location</span>
+          <span class="project-info-value">Pench, Madhya Pradesh</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Project Type</span>
+          <span class="project-info-value">Conference cum Dining Hall</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Sector</span>
+          <span class="project-info-value">Eco-Resorts &amp; Hospitality</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Scope</span>
+          <span class="project-info-value">Design, Fabrication &amp; On-site Assembly</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Year</span>
+          <!-- PLACEHOLDER: Client to confirm year -->
+          <span class="project-info-value" style="color:var(--muted)">To be confirmed</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Area</span>
+          <!-- PLACEHOLDER: Client to confirm floor area -->
+          <span class="project-info-value" style="color:var(--muted)">To be confirmed</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Products Used</span>
+          <span class="project-info-value">Bamboo Building Components, Custom Long-Span Trusses</span>
+        </div>
+        <a href="contact.html" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center">Enquire About This Project</a>
+      </aside>
 
-        <!-- RIGHT: Project Info Box -->
-        <aside class="project-info-box">
-          <h4>Project Details</h4>
-          <div class="project-info-row">
-            <span class="project-info-label">Client</span>
-            <span class="project-info-value">Restfo Pench Tiger Resort</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Location</span>
-            <span class="project-info-value">Pench, Madhya Pradesh</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Project Type</span>
-            <span class="project-info-value">Conference cum Dining Hall</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Scope</span>
-            <span class="project-info-value">Design, Fabrication &amp; Assembly</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Year</span>
-            <span class="project-info-value">[ Year ]</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Area</span>
-            <span class="project-info-value">[ X ] sq. ft.</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Products Used</span>
-            <span class="project-info-value">Bamboo Building Components, Custom Trusses</span>
-          </div>
-          <a href="contact.html" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Enquire About This Project</a>
-        </aside>
+    </div>
+  </div>
+</section>
 
+<!-- PHOTO GALLERY -->
+<section class="section bg-light">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Project Gallery</span>
+    <h2 class="section-title center">Exterior &amp; Interior Views</h2>
+
+    <div class="gallery-grid">
+      <!-- Row 1: exterior wide (spans 2) + exterior portrait -->
+      <div class="span2">
+        <img src="images/portfolio/conference-hall/ccd-exterior-3.jpg"
+             alt="Conference hall wide exterior view — bamboo columns and red metal roof at Pench Tiger Resort"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/conference-hall/ccd-exterior-1.jpg"
+             alt="Conference hall side elevation — bamboo wall cladding and entrance approach"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+
+      <!-- Row 2: three equal -->
+      <div>
+        <img src="images/portfolio/conference-hall/ccd-exterior-4.jpg"
+             alt="Conference hall from the garden — full structure with forest backdrop"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/conference-hall/ccd-interior-1.jpg"
+             alt="Interior bamboo ceiling — warm-lit truss detail with pendant lighting"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/conference-hall/ccd-interior-2.jpg"
+             alt="Interior view looking toward the open sides — dining layout with forest view"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+
+      <!-- Row 3: interior portraits -->
+      <div>
+        <img src="images/portfolio/conference-hall/ccd-interior-3.jpg"
+             alt="Bamboo roof truss close-up — structural joinery detail"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/conference-hall/ccd-interior-4.jpg"
+             alt="Interior ceiling showing bamboo purlin and rafter system"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/conference-hall/ccd-interior-5.jpg"
+             alt="Interior — fan and bamboo ceiling at night with warm ambient light"
+             loading="lazy" onclick="openLightbox(this.src)" />
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- GALLERY SECTION -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Project Gallery</h2>
-      <p class="section-sub center">Interior and exterior views of the Conference cum Dining Hall at Pench Tiger Reserve.</p>
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+  <img id="lightbox-img" src="" alt="Enlarged project photo" />
+</div>
+<script>
+function openLightbox(src){
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeLightbox();
+});
+</script>
 
-      <div class="gallery-masonry">
+<!-- CONSTRUCTION PROCESS -->
+<section class="section">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Behind the Build</span>
+    <h2 class="section-title center">How It Was Built</h2>
+    <p class="section-sub center">From cleared ground in Pench to a completed dining pavilion — the construction story in sequence.</p>
 
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Exterior view of the conference hall roof structure and bamboo columns"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Interior dining area with bamboo ceiling truss detail"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Conference seating arrangement inside the bamboo pavilion"></div>
-          </div>
-        </div>
-
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Close-up of custom bamboo truss joint and craftsmanship detail"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – View of the hall opening towards the forest landscape of Pench"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Night ambience: lit bamboo dining pavilion inside the resort"></div>
-          </div>
-        </div>
-
+    <!-- Phase 1: Site & Early Structure -->
+    <div class="process-phase">
+      <h4>Phase 01–03 &nbsp;·&nbsp; Site Preparation &amp; Structure Start</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/conference-hall/process/ccd-process-01-site.jpg"
+             alt="Site cleared and prepared at Pench Tiger Reserve" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-02-render.jpg"
+             alt="Architectural render showing the proposed conference hall design" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-03-frame.jpg"
+             alt="Early structural frame with bamboo columns being raised" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-04-roof.jpg"
+             alt="Roof structure taking shape with bamboo beams and purlins" loading="lazy" />
       </div>
     </div>
-  </section>
 
-  <!-- SPLIT SECTION: Challenges & Approach -->
-  <section class="section">
-    <div class="container">
-      <div class="split-section">
-        <div class="split-inner">
+    <!-- Phase 2: Column Beam -->
+    <div class="process-phase">
+      <h4>Phase 04 &nbsp;·&nbsp; Column, Beam &amp; Top Beam</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/conference-hall/process/ccd-process-06-01.jpg"
+             alt="Bamboo columns being positioned and plumbed" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-06-02.jpg"
+             alt="Beam installation between columns" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-06-03.jpg"
+             alt="Top beam connections being made" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-06-04.jpg"
+             alt="Structural frame with columns and beams fully erected" loading="lazy" />
+      </div>
+    </div>
 
-          <div class="split-content">
-            <span class="eyebrow">Process &amp; Approach</span>
-            <h2>Building in the Heart of the Forest</h2>
-            <p>[ Describe the key challenges of constructing a large-span structure inside a protected tiger reserve. Limited vehicle access, forest department regulations, minimal on-site fabrication, and the need to avoid disruption to wildlife. ]</p>
-            <p>[ Explain the Wonder Grass approach: full off-site prefabrication of bamboo components at the workshop, precise dimensioning so that components could be flat-packed and transported by smaller vehicles, and rapid on-site assembly by a skilled team. ]</p>
-            <p>[ Detail the structural design choices: custom bamboo trusses for long-span coverage, treated bamboo poles for durability in the humid forest climate, and natural material finishes that blend with the jungle setting. ]</p>
-            <ul class="features-list">
-              <li>Full off-site prefabrication for minimal forest disruption</li>
-              <li>Custom long-span bamboo truss system</li>
-              <li>Treatment and finishing for humid forest climate</li>
-              <li>Rapid on-site assembly in compliance with reserve guidelines</li>
-              <li>Natural material palette harmonising with forest surroundings</li>
-            </ul>
-          </div>
+    <!-- Phase 3: Truss -->
+    <div class="process-phase">
+      <h4>Phase 05 &nbsp;·&nbsp; Truss &amp; Structural Details</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/conference-hall/process/ccd-process-07-01.jpg"
+             alt="Bamboo truss assembly being positioned on the structure" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-07-02.jpg"
+             alt="Truss detail showing joinery and connection method" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-07-03.jpg"
+             alt="Multiple trusses installed — long-span roof system taking form" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-07-04.jpg"
+             alt="Truss and rafter structure from below" loading="lazy" />
+      </div>
+    </div>
 
-          <div class="split-image">
-            <div class="wf-block h-lg" data-label="Split Image – Assembly process or structural detail of the Pench conference hall bamboo frame"></div>
-          </div>
+    <!-- Phase 4: Purlin & Finishing -->
+    <div class="process-phase">
+      <h4>Phase 06–07 &nbsp;·&nbsp; Purlins, Top Layer &amp; Near Completion</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/conference-hall/process/ccd-process-08-01.jpg"
+             alt="Purlin layer being fixed across trusses" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-08-02.jpg"
+             alt="Top purlin and roofing preparation" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-09-01.jpg"
+             alt="Structure near completion — walls and cladding being added" loading="lazy" />
+        <img src="images/portfolio/conference-hall/process/ccd-process-09-02.jpg"
+             alt="Final stages — interior view of completed bamboo ceiling" loading="lazy" />
+      </div>
+    </div>
 
+  </div>
+</section>
+
+<!-- RELATED PROJECTS -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title center">Related Projects</h2>
+    <p class="section-sub center">More of our portfolio work across hospitality, community, and events.</p>
+    <div class="card-grid cols-3">
+
+      <a href="portfolio-community-space.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <div class="wf-block h-md" data-label="Community Space, Snehanchal, Nagpur"></div>
         </div>
-      </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Community</span>
+          <h4 class="card-title">Community Space</h4>
+          <p class="card-desc">Snehanchal, Nagpur, Maharashtra</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-ziro-music-festival.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <div class="wf-block h-md" data-label="Ziro Music Festival, Arunachal Pradesh"></div>
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Events &amp; Festivals</span>
+          <h4 class="card-title">Ziro Music Festival</h4>
+          <p class="card-desc">Ziro, Arunachal Pradesh</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-outdoor-structures.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <div class="wf-block h-md" data-label="Outdoor Structures — Machaan, Pergola, Gazebo"></div>
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Outdoor Structures</span>
+          <h4 class="card-title">Outdoor Structures</h4>
+          <p class="card-desc">Machaan, Pergola &amp; Gazebo</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- RELATED PROJECTS -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Related Projects</h2>
-      <p class="section-sub center">Explore more of our portfolio work across hospitality, community, and events.</p>
-
-      <div class="card-grid cols-3">
-
-        <a href="portfolio-community-space.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project – Community Space, Snehanchal, Nagpur"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Community</span>
-            <h4 class="card-title">Community Space</h4>
-            <p class="card-desc">Snehanchal, Nagpur, Maharashtra</p>
-            <span class="btn-text">View Project →</span>
-          </div>
-        </a>
-
-        <a href="portfolio-ziro-music-festival.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project – Ziro Music Festival, Arunachal Pradesh"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Events &amp; Festivals</span>
-            <h4 class="card-title">Ziro Music Festival</h4>
-            <p class="card-desc">Ziro, Arunachal Pradesh</p>
-            <span class="btn-text">View Project →</span>
-          </div>
-        </a>
-
-        <a href="portfolio-machaan.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project – Machaan, Chennai, Tamil Nadu"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Hospitality / Dining</span>
-            <h4 class="card-title">Machaan</h4>
-            <p class="card-desc">Chennai, Tamil Nadu</p>
-            <span class="btn-text">View Project →</span>
-          </div>
-        </a>
-
-      </div>
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="container cta-banner-inner">
+    <div class="cta-banner-text">
+      <h2>Have a similar project in mind?</h2>
+      <p>Tell us about your space and we'll design a bamboo solution that fits your site, budget, and vision.</p>
     </div>
-  </section>
-
-  <!-- CTA BANNER -->
-  <section class="cta-banner bg-green-dark">
-    <div class="container cta-banner-inner">
-      <div class="cta-banner-text">
-        <h2>Have a similar project in mind?</h2>
-        <p>Tell us about your space and we'll design a bamboo solution that fits your site, budget, and vision.</p>
-      </div>
-      <div class="cta-banner-actions">
-        <a href="contact.html" class="btn btn-primary">Get a Quote</a>
-        <a href="portfolio-outdoor-structures.html" class="btn btn-outline-white">See More Projects</a>
-      </div>
+    <div class="cta-banner-actions">
+      <a href="contact.html" class="btn btn-white">Get a Quote</a>
+      <a href="portfolio-community-space.html" class="btn btn-outline-white">See More Projects</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- NEWSLETTER -->
-  <section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
+<!-- NEWSLETTER -->
+<section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">Pioneering Bamboo for a Sustainable India</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall</a></li><li><a href="portfolio-community-space.html">Community Space</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
+<!-- FOOTER -->
+<footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">the wonder that works.</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall</a></li><li><a href="portfolio-community-space.html">Community Space</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
 
 </body>
 </html>
