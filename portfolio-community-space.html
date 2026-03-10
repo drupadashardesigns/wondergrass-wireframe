@@ -3,19 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Community Space – Snehanchal, Nagpur | Wonder Grass Initiative</title>
+  <title>Community Space – Snehanchal Nagpur | Wonder Grass Initiative</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .port-hero-img {
+      width: 100%;
+      height: clamp(320px, 55vw, 640px);
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-top: 2rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+      transition: opacity .2s;
+    }
+    .gallery-grid img:hover { opacity: .88; cursor: zoom-in; }
+    .gallery-grid .span2 { grid-column: span 2; }
+    .gallery-grid .span2 img { aspect-ratio: 16/9; }
+    .process-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+    .process-strip img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+    }
+    .process-phase { margin-bottom: 2.5rem; }
+    .process-phase h4 {
+      font-family: var(--font-ui);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem; right: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid .span2 { grid-column: span 1; }
+      .gallery-grid .span2 img { aspect-ratio: 4/3; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ANNOUNCEMENT BAR -->
-  <div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote →</a></div>
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote →</a></div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-inner container">
-      <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd.</span></div></a>
-          <nav class="main-nav">
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd. &nbsp;·&nbsp; <em>the wonder that works.</em></span></div></a>
+    <nav class="main-nav">
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
@@ -42,10 +128,14 @@
         <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </nav>
-      <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
-    </div>
-  </header>
-<!-- MOBILE NAV OVERLAY -->
+    <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-header">
@@ -94,32 +184,25 @@
   var nav    = document.getElementById('mobileNav');
   var overlay= document.getElementById('mobileNavOverlay');
   var body   = document.body;
-
   function openNav(){
-    nav.classList.add('open');
-    overlay.classList.add('open');
+    nav.classList.add('open'); overlay.classList.add('open');
     body.style.overflow = 'hidden';
     toggle.setAttribute('aria-expanded','true');
     nav.setAttribute('aria-hidden','false');
   }
   function closeNav(){
-    nav.classList.remove('open');
-    overlay.classList.remove('open');
+    nav.classList.remove('open'); overlay.classList.remove('open');
     body.style.overflow = '';
     toggle.setAttribute('aria-expanded','false');
     nav.setAttribute('aria-hidden','true');
   }
-
   toggle.addEventListener('click', openNav);
   close.addEventListener('click', closeNav);
   overlay.addEventListener('click', closeNav);
-
-  // Sub-menu toggles
   document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(btn){
     btn.addEventListener('click', function(){
       var sub = this.nextElementSibling;
       var isOpen = sub.classList.contains('open');
-      // Close all
       document.querySelectorAll('.mobile-nav-sub').forEach(function(s){ s.classList.remove('open'); });
       document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(b){ b.classList.remove('active'); });
       if(!isOpen){ sub.classList.add('open'); this.classList.add('active'); }
@@ -128,225 +211,308 @@
 })();
 </script>
 
-  <!-- PAGE HERO -->
-  <section class="page-hero tall">
-    <div class="page-hero-bg wf-block h-banner" data-label="Hero Image – Community Space, Snehanchal, Nagpur"></div>
-    <div class="page-hero-overlay"></div>
-    <div class="page-hero-content container">
-      <span class="eyebrow">Portfolio — Community</span>
-      <h1>Community Space</h1>
-      <p>A warm, inclusive bamboo community gathering space designed to bring people together in Nagpur.</p>
-      <p class="hero-meta">Snehanchal &nbsp;·&nbsp; Nagpur, Maharashtra</p>
-    </div>
-  </section>
+<!-- HERO -->
+<div style="background:#1a1a1a">
+  <img
+    src="images/portfolio/community-space/cs-exterior-4.jpg"
+    alt="Community Space exterior — bamboo structure for Snehanchal, Nagpur"
+    class="port-hero-img"
+    loading="eager"
+  />
+</div>
 
-  <!-- BREADCRUMB -->
-  <section class="section compact">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="index.html">Home</a> ›
-        <a href="#">Portfolio</a> ›
-        <span>Community Space – Snehanchal, Nagpur</span>
-      </nav>
-    </div>
-  </section>
+<!-- BREADCRUMB -->
+<section class="section compact">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="#">Portfolio</a> ›
+      <span>Community Space – Snehanchal, Nagpur</span>
+    </nav>
+  </div>
+</section>
 
-  <!-- PROJECT LAYOUT: Description + Info Box -->
-  <section class="section">
-    <div class="container">
-      <div class="project-layout">
+<!-- PROJECT OVERVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="project-layout">
 
-        <!-- LEFT: Description -->
-        <div class="project-main">
-          <h2>About the Project</h2>
-          <p>[ Description of the community space project for Snehanchal in Nagpur. Overview of the organisation and their mission. What the gathering space is used for — community meetings, events, workshops, cultural programmes — and the number of people it can accommodate. ]</p>
-          <p>[ Design philosophy: creating a welcoming, warm space that is accessible and inclusive. How bamboo was chosen as the primary material to reflect sustainability values and connect the community with nature. The structural approach, use of bamboo panels for walls and partitions, and natural ventilation design. ]</p>
-          <p>[ Construction approach: prefabrication, timeline, community involvement if any, and the end result — a space that belongs to the people it serves. ]</p>
+      <div class="project-main">
+        <span class="eyebrow">Portfolio — Community</span>
+        <h1 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin:.5rem 0 1.25rem">Community Space</h1>
+
+        <p>Snehanchal is a social organisation based in Nagpur that works with children and communities in need. They required a dedicated gathering space — a hall that could host community meetings, children's programmes, cultural events, and workshops — built with materials that reflected their values of sustainability and simplicity.</p>
+
+        <p>Wonder Grass designed and built a bamboo community hall that is open, warm, and welcoming. The structure uses bamboo columns and beams with a bamboo-truss roof system, bamboo panel screens for the walls, and a natural material palette throughout. The design prioritises natural light and cross-ventilation, keeping the space comfortable through Nagpur's hot summers without relying on mechanical cooling.</p>
+
+        <p>As with all Wonder Grass projects, the components were prefabricated off-site at the Nagpur workshop and assembled on-site in a short window — minimising disruption to the organisation's daily activities and reducing construction waste. The result is a space that is genuinely used and loved by the community it was built for.</p>
+
+        <ul class="features-list" style="margin-top:1.25rem">
+          <li>Bamboo column, beam and truss roof structural system</li>
+          <li>Bamboo panel screens — walls and partitions</li>
+          <li>Natural light and cross-ventilation design</li>
+          <li>Full off-site prefabrication for fast, clean assembly</li>
+          <li>Low-maintenance natural material finish throughout</li>
+        </ul>
+      </div>
+
+      <aside class="project-info-box">
+        <h4>Project Details</h4>
+        <div class="project-info-row">
+          <span class="project-info-label">Client</span>
+          <span class="project-info-value">Snehanchal</span>
         </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Location</span>
+          <span class="project-info-value">Nagpur, Maharashtra</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Project Type</span>
+          <span class="project-info-value">Community Gathering Hall</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Sector</span>
+          <span class="project-info-value">Community &amp; Institutional</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Scope</span>
+          <span class="project-info-value">Design, Fabrication &amp; On-site Assembly</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Year</span>
+          <!-- PLACEHOLDER: Client to confirm year -->
+          <span class="project-info-value" style="color:var(--muted)">To be confirmed</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Area</span>
+          <!-- PLACEHOLDER: Client to confirm floor area -->
+          <span class="project-info-value" style="color:var(--muted)">To be confirmed</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Products Used</span>
+          <span class="project-info-value">Bamboo Building Components, Bamboo Panels &amp; Screens</span>
+        </div>
+        <a href="contact.html" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center">Enquire About This Project</a>
+      </aside>
 
-        <!-- RIGHT: Project Info Box -->
-        <aside class="project-info-box">
-          <h4>Project Details</h4>
-          <div class="project-info-row">
-            <span class="project-info-label">Client</span>
-            <span class="project-info-value">Snehanchal</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Location</span>
-            <span class="project-info-value">Nagpur, Maharashtra</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Project Type</span>
-            <span class="project-info-value">Community Space / Gathering Hall</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Scope</span>
-            <span class="project-info-value">Design, Fabrication &amp; Assembly</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Year</span>
-            <span class="project-info-value">[ Year ]</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Area</span>
-            <span class="project-info-value">[ X ] sq. ft.</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Products Used</span>
-            <span class="project-info-value">Bamboo Building Components, Bamboo Panels</span>
-          </div>
-          <a href="contact.html" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Enquire About This Project</a>
-        </aside>
+    </div>
+  </div>
+</section>
 
+<!-- PHOTO GALLERY -->
+<section class="section bg-light">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Project Gallery</span>
+    <h2 class="section-title center">Exterior &amp; Interior Views</h2>
+
+    <div class="gallery-grid">
+      <!-- Row 1: wide landscape + portrait -->
+      <div class="span2">
+        <img src="images/portfolio/community-space/cs-exterior-1.jpg"
+             alt="Community Space full exterior — bamboo hall facade with entrance at Snehanchal Nagpur"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-3.jpg"
+             alt="Community Space side elevation — bamboo columns and screened wall panels"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+
+      <!-- Row 2: three equal -->
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-2.jpg"
+             alt="Community Space entrance approach — bamboo columns and open verandah"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-5.jpg"
+             alt="Community Space exterior — view of the bamboo roof overhangs and structure"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-6.jpg"
+             alt="Community Space — garden-side view of the completed bamboo structure"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+
+      <!-- Row 3: three equal -->
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-7.jpg"
+             alt="Community Space — corner view showing bamboo column and wall panel detail"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-8.jpg"
+             alt="Community Space — close-up of bamboo screen panel and column connection"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-9.jpg"
+             alt="Community Space exterior at dusk — warm interior light through bamboo screens"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+
+      <!-- Row 4: interior views -->
+      <div>
+        <img src="images/portfolio/community-space/cs-interior-1.jpg"
+             alt="Interior — bamboo roof truss and ceiling structure with natural light"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-interior-2.jpg"
+             alt="Interior — open hall with bamboo columns and screened walls"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-interior-3.jpg"
+             alt="Interior — view of the bamboo ceiling trusses and purlin layer"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+
+      <!-- Row 5 -->
+      <div>
+        <img src="images/portfolio/community-space/cs-interior-4.jpg"
+             alt="Interior — gathering hall with filtered light through bamboo screens"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-interior-5.jpg"
+             alt="Interior detail — bamboo panel screen wall and column connection"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/community-space/cs-exterior-10.jpg"
+             alt="Community Space — complete exterior view with surrounding landscape"
+             loading="lazy" onclick="openLightbox(this.src)" />
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- GALLERY SECTION -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Project Gallery</h2>
-      <p class="section-sub center">Views of the community gathering space designed for Snehanchal in Nagpur.</p>
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+  <img id="lightbox-img" src="" alt="Enlarged project photo" />
+</div>
+<script>
+function openLightbox(src){
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeLightbox();
+});
+</script>
 
-      <div class="gallery-masonry">
+<!-- CONSTRUCTION PROCESS -->
+<section class="section">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Behind the Build</span>
+    <h2 class="section-title center">Assembly in Action</h2>
+    <p class="section-sub center">Off-site fabrication at the Nagpur workshop, transported and assembled on location at Snehanchal.</p>
 
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Exterior facade of the bamboo community hall with entrance"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Interior gathering space with bamboo panel walls and seating arrangement"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Close-up of bamboo panel wall partition detail and texture"></div>
-          </div>
-        </div>
-
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Roof structure view showing bamboo beams and natural light filtration"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Community event in progress inside the bamboo hall"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Landscape view of the community space within the Nagpur site context"></div>
-          </div>
-        </div>
-
+    <div class="process-phase">
+      <h4>On-site Assembly &nbsp;·&nbsp; Structural Frame &amp; Panels</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/community-space/process/cs-assembly-1.jpg"
+             alt="Assembly — bamboo columns and beam frame being erected on site" loading="lazy" />
+        <img src="images/portfolio/community-space/process/cs-assembly-2.jpg"
+             alt="Assembly — truss installation over the column-beam frame" loading="lazy" />
+        <img src="images/portfolio/community-space/process/cs-assembly-3.jpg"
+             alt="Assembly — bamboo panel screens being fitted to the wall frame" loading="lazy" />
+        <img src="images/portfolio/community-space/process/cs-assembly-4.jpg"
+             alt="Assembly — roof structure being completed" loading="lazy" />
       </div>
     </div>
-  </section>
 
-  <!-- SPLIT SECTION: Challenges & Approach -->
-  <section class="section">
-    <div class="container">
-      <div class="split-section">
-        <div class="split-inner">
+    <div class="process-phase">
+      <h4>Structural Detail &nbsp;·&nbsp; Truss System</h4>
+      <div class="process-strip" style="grid-template-columns: repeat(3, 1fr)">
+        <img src="images/portfolio/community-space/process/cs-assembly-5.jpg"
+             alt="Assembly — near-complete structure from outside" loading="lazy" />
+        <img src="images/portfolio/community-space/process/cs-assembly-6.jpg"
+             alt="Assembly — final finishing touches and cladding" loading="lazy" />
+        <img src="images/portfolio/community-space/process/cs-truss-detail.jpg"
+             alt="Truss detail — bamboo truss connection and joinery close-up" loading="lazy" />
+      </div>
+    </div>
 
-          <div class="split-content">
-            <span class="eyebrow">Process &amp; Approach</span>
-            <h2>Designing for People, Building with Purpose</h2>
-            <p>[ Describe the brief from Snehanchal: an affordable, durable, and welcoming space that could serve a diverse urban community in Nagpur. The challenges of designing within a budget while maintaining quality and structural integrity. ]</p>
-            <p>[ Wonder Grass response: the use of standardised bamboo building components to keep costs predictable, bamboo panels for quick partition walls, and a clear-span roof structure that maximises usable floor space without interior columns. ]</p>
-            <p>[ Sustainability angle: bamboo's low cost, fast renewability, and thermal comfort properties making it ideal for a community space in central India's warm climate. The long-term maintenance advantages passed on to the client. ]</p>
-            <ul class="features-list">
-              <li>Affordable construction using standardised bamboo components</li>
-              <li>Column-free clear-span interior for flexible use</li>
-              <li>Bamboo panel walls for rapid enclosure and natural aesthetics</li>
-              <li>Thermal comfort designed for Nagpur's warm climate</li>
-              <li>Low maintenance and long-term durability for community use</li>
-            </ul>
-          </div>
+  </div>
+</section>
 
-          <div class="split-image">
-            <div class="wf-block h-lg" data-label="Split Image – Construction or interior detail of the Snehanchal community bamboo space"></div>
-          </div>
+<!-- RELATED PROJECTS -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title center">Related Projects</h2>
+    <p class="section-sub center">More of our work across hospitality, events, and community sectors.</p>
+    <div class="card-grid cols-3">
 
+      <a href="portfolio-conference-hall.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <img src="images/portfolio/conference-hall/ccd-exterior-2.jpg"
+               alt="Conference cum Dining Hall — Pench Tiger Resort"
+               style="width:100%;height:100%;object-fit:cover" loading="lazy" />
         </div>
-      </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Hospitality</span>
+          <h4 class="card-title">Conference cum Dining Hall</h4>
+          <p class="card-desc">Restfo Pench Tiger Resort, Madhya Pradesh</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-ziro-music-festival.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <div class="wf-block h-md" data-label="Ziro Music Festival, Arunachal Pradesh"></div>
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Events &amp; Festivals</span>
+          <h4 class="card-title">Ziro Music Festival</h4>
+          <p class="card-desc">Ziro, Arunachal Pradesh</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-outdoor-structures.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <div class="wf-block h-md" data-label="Outdoor Structures — Machaan, Pergola, Gazebo"></div>
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Outdoor Structures</span>
+          <h4 class="card-title">Outdoor Structures</h4>
+          <p class="card-desc">Machaan, Pergola &amp; Gazebo</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- RELATED PROJECTS -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Related Projects</h2>
-      <p class="section-sub center">Explore more of our work across hospitality, residential, and outdoor spaces.</p>
-
-      <div class="card-grid cols-3">
-
-        <a href="portfolio-conference-hall.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project – Conference Hall, Restfo Pench Tiger Resort, Madhya Pradesh"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Hospitality</span>
-            <h4 class="card-title">Conference cum Dining Hall</h4>
-            <p class="card-desc">Pench, Madhya Pradesh</p>
-            <span class="btn-text">View Project →</span>
-          </div>
-        </a>
-
-        <a href="portfolio-farm-house.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project – Farm House, Bamboo Residential"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Residential / Farm</span>
-            <h4 class="card-title">Farm House</h4>
-            <p class="card-desc">[ Location ]</p>
-            <span class="btn-text">View Project →</span>
-          </div>
-        </a>
-
-        <a href="portfolio-outdoor-structures.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project – Outdoor Structures Collection"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Outdoor / Landscape</span>
-            <h4 class="card-title">Outdoor Structures</h4>
-            <p class="card-desc">Various Locations, India</p>
-            <span class="btn-text">View Project →</span>
-          </div>
-        </a>
-
-      </div>
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="container cta-banner-inner">
+    <div class="cta-banner-text">
+      <h2>Have a similar project in mind?</h2>
+      <p>Tell us about your space and we'll design a bamboo solution that fits your community, site, and budget.</p>
     </div>
-  </section>
-
-  <!-- CTA BANNER -->
-  <section class="cta-banner bg-green-dark">
-    <div class="container cta-banner-inner">
-      <div class="cta-banner-text">
-        <h2>Building a community space?</h2>
-        <p>We design affordable, dignified bamboo structures for NGOs, institutions, and community organisations across India.</p>
-      </div>
-      <div class="cta-banner-actions">
-        <a href="contact.html" class="btn btn-primary">Get a Quote</a>
-        <a href="portfolio-conference-hall.html" class="btn btn-outline-white">See More Projects</a>
-      </div>
+    <div class="cta-banner-actions">
+      <a href="contact.html" class="btn btn-white">Get a Quote</a>
+      <a href="portfolio-conference-hall.html" class="btn btn-outline-white">See More Projects</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- NEWSLETTER -->
-  <section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
+<!-- NEWSLETTER -->
+<section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">Pioneering Bamboo for a Sustainable India</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall &#x2013; Pench</a></li><li><a href="portfolio-community-space.html">Community Space &#x2013; Nagpur</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
+<!-- FOOTER -->
+<footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">the wonder that works.</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall</a></li><li><a href="portfolio-community-space.html">Community Space</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
 
 </body>
 </html>
