@@ -5,17 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ziro Music Festival – Arunachal Pradesh | Wonder Grass Initiative</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .port-hero-img {
+      width: 100%;
+      height: clamp(320px, 55vw, 640px);
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-top: 2rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+      transition: opacity .2s;
+    }
+    .gallery-grid img:hover { opacity: .88; cursor: zoom-in; }
+    .gallery-grid .span2 { grid-column: span 2; }
+    .gallery-grid .span2 img { aspect-ratio: 16/9; }
+    .process-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+    .process-strip img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+    }
+    .process-phase { margin-bottom: 2.5rem; }
+    .process-phase h4 {
+      font-family: var(--font-ui);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem; right: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid .span2 { grid-column: span 1; }
+      .gallery-grid .span2 img { aspect-ratio: 4/3; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ANNOUNCEMENT BAR -->
-  <div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote &#x2192;</a></div>
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote →</a></div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-inner container">
-      <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd.</span></div></a>
-          <nav class="main-nav">
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd. &nbsp;·&nbsp; <em>the wonder that works.</em></span></div></a>
+    <nav class="main-nav">
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
@@ -42,10 +128,14 @@
         <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </nav>
-      <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
-    </div>
-  </header>
-<!-- MOBILE NAV OVERLAY -->
+    <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-header">
@@ -94,32 +184,25 @@
   var nav    = document.getElementById('mobileNav');
   var overlay= document.getElementById('mobileNavOverlay');
   var body   = document.body;
-
   function openNav(){
-    nav.classList.add('open');
-    overlay.classList.add('open');
+    nav.classList.add('open'); overlay.classList.add('open');
     body.style.overflow = 'hidden';
     toggle.setAttribute('aria-expanded','true');
     nav.setAttribute('aria-hidden','false');
   }
   function closeNav(){
-    nav.classList.remove('open');
-    overlay.classList.remove('open');
+    nav.classList.remove('open'); overlay.classList.remove('open');
     body.style.overflow = '';
     toggle.setAttribute('aria-expanded','false');
     nav.setAttribute('aria-hidden','true');
   }
-
   toggle.addEventListener('click', openNav);
   close.addEventListener('click', closeNav);
   overlay.addEventListener('click', closeNav);
-
-  // Sub-menu toggles
   document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(btn){
     btn.addEventListener('click', function(){
       var sub = this.nextElementSibling;
       var isOpen = sub.classList.contains('open');
-      // Close all
       document.querySelectorAll('.mobile-nav-sub').forEach(function(s){ s.classList.remove('open'); });
       document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(b){ b.classList.remove('active'); });
       if(!isOpen){ sub.classList.add('open'); this.classList.add('active'); }
@@ -128,223 +211,390 @@
 })();
 </script>
 
-  <!-- PAGE HERO -->
-  <section class="page-hero tall">
-    <div class="page-hero-bg wf-block h-banner" data-label="Hero Image - Ziro Music Festival bamboo stage and pavilions, Arunachal Pradesh"></div>
-    <div class="page-hero-overlay"></div>
-    <div class="page-hero-content container">
-      <span class="eyebrow">Portfolio &#x2014; Events &amp; Festivals</span>
-      <h1>Ziro Music Festival</h1>
-      <p>Iconic bamboo stage and pavilion structures for India&#x2019;s beloved Ziro Music Festival in the heart of Arunachal Pradesh.</p>
-      <p class="hero-meta">Ziro Music Festival &nbsp;&#xB7;&nbsp; Ziro, Arunachal Pradesh</p>
-    </div>
-  </section>
+<!-- HERO -->
+<div style="background:#1a1a1a">
+  <img
+    src="images/portfolio/ziro-music-festival/ziro-day-stage-01.jpg"
+    alt="Ziro Music Festival — bamboo day stage and pavilions, Ziro Valley, Arunachal Pradesh"
+    class="port-hero-img"
+    loading="eager"
+  />
+</div>
 
-  <!-- BREADCRUMB -->
-  <section class="section compact">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="index.html">Home</a> &#x203A;
-        <a href="#">Portfolio</a> &#x203A;
-        <span>Ziro Music Festival &#x2013; Arunachal Pradesh</span>
-      </nav>
-    </div>
-  </section>
+<!-- BREADCRUMB -->
+<section class="section compact">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="#">Portfolio</a> ›
+      <span>Ziro Music Festival – Arunachal Pradesh</span>
+    </nav>
+  </div>
+</section>
 
-  <!-- PROJECT LAYOUT -->
-  <section class="section">
-    <div class="container">
-      <div class="project-layout">
+<!-- PROJECT OVERVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="project-layout">
 
-        <div class="project-main">
-          <h2>About the Project</h2>
-          <p>[ Description of the Ziro Music Festival project in Arunachal Pradesh. Background on the festival — one of India&#x2019;s most celebrated independent music festivals set in the stunning Ziro Valley, a UNESCO World Heritage nomination site. The scale of the festival, number of attendees, and the role bamboo structures play in creating the festival&#x2019;s distinctive atmosphere. ]</p>
-          <p>[ Detail of the structures designed and built: the main stage, side pavilions, ticketing and entry gateways, audience shade canopies, and any other bamboo elements. How Wonder Grass designed structures that could be assembled efficiently on the remote festival site, with transport logistics from workshop to Ziro factored into the design. ]</p>
-          <p>[ The aesthetic dimension: bamboo structures that are visually dramatic against the backdrop of the Ziro Valley&#x2019;s rice fields and pine forests — and how the material speaks to the region&#x2019;s strong bamboo culture. The dismantling or reuse strategy after the festival. ]</p>
+      <div class="project-main">
+        <span class="eyebrow">Portfolio — Events &amp; Festivals</span>
+        <h1 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin:.5rem 0 1.25rem">Ziro Music Festival</h1>
+
+        <p>[ Description of the Ziro Music Festival project in Arunachal Pradesh. Background on the festival — one of India's most celebrated independent music festivals set in the stunning Ziro Valley, a UNESCO World Heritage nomination site. The scale of the festival, number of attendees, and the role bamboo structures play in creating the festival's distinctive atmosphere. ]</p>
+
+        <p>[ Detail of the structures designed and built: the main day stage, night stage, food court, VIP lounge, tourism pavilion, visitors plaza, and the Popi Sermin structure. How Wonder Grass designed structures that could be assembled efficiently on the remote festival site, with transport logistics from workshop to Ziro factored into the design. ]</p>
+
+        <p>[ The aesthetic dimension: bamboo structures that are visually dramatic against the backdrop of the Ziro Valley's rice fields and pine forests — and how the material speaks to the region's strong bamboo culture. ]</p>
+
+        <ul class="features-list" style="margin-top:1.25rem">
+          <li>Flat-pack component system for remote transport to Arunachal Pradesh</li>
+          <li>Rapid on-site assembly within tight festival setup timelines</li>
+          <li>Wind-load engineered open-span stage and canopy structures</li>
+          <li>Culturally resonant material — bamboo native to the region</li>
+          <li>Multiple distinct structures across the festival grounds</li>
+        </ul>
+      </div>
+
+      <aside class="project-info-box">
+        <h4>Project Details</h4>
+        <div class="project-info-row">
+          <span class="project-info-label">Client</span>
+          <span class="project-info-value">Ziro Music Festival</span>
         </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Location</span>
+          <span class="project-info-value">Ziro, Arunachal Pradesh</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Project Type</span>
+          <span class="project-info-value">Festival Stage &amp; Pavilions</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Scope</span>
+          <span class="project-info-value">Design, Fabrication, Transport &amp; Assembly</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Year</span>
+          <span class="project-info-value" style="color:var(--muted)">To be confirmed</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Area</span>
+          <span class="project-info-value" style="color:var(--muted)">To be confirmed</span>
+        </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Products Used</span>
+          <span class="project-info-value">Bamboo Building Components, Trusses, Panels</span>
+        </div>
+        <a href="contact.html" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center">Enquire About This Project</a>
+      </aside>
 
-        <aside class="project-info-box">
-          <h4>Project Details</h4>
-          <div class="project-info-row">
-            <span class="project-info-label">Client</span>
-            <span class="project-info-value">Ziro Music Festival</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Location</span>
-            <span class="project-info-value">Ziro, Arunachal Pradesh</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Project Type</span>
-            <span class="project-info-value">Festival Stage &amp; Pavilions</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Scope</span>
-            <span class="project-info-value">Design, Fabrication, Transport &amp; Assembly</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Year</span>
-            <span class="project-info-value">[ Year ]</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Area</span>
-            <span class="project-info-value">[ X ] sq. ft. (total covered)</span>
-          </div>
-          <div class="project-info-row">
-            <span class="project-info-label">Products Used</span>
-            <span class="project-info-value">Bamboo Building Components, Trusses, Panels</span>
-          </div>
-          <a href="contact.html" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Enquire About This Project</a>
-        </aside>
+    </div>
+  </div>
+</section>
 
+<!-- DAY STAGE GALLERY -->
+<section class="section bg-light">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Project Gallery</span>
+    <h2 class="section-title center">Day Stage</h2>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-02.jpg" alt="Ziro Music Festival — bamboo day stage main facade" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-03.jpg" alt="Ziro Music Festival — day stage side view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-04.jpg" alt="Ziro Music Festival — day stage detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-05.jpg" alt="Ziro Music Festival — bamboo stage structure" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-06.jpg" alt="Ziro Music Festival — stage canopy and columns" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-07.jpg" alt="Ziro Music Festival — day stage from audience view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-08.jpg" alt="Ziro Music Festival — stage truss and roof detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-09.jpg" alt="Ziro Music Festival — bamboo stage panel work" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-10.jpg" alt="Ziro Music Festival — day stage wide view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-11.jpg" alt="Ziro Music Festival — stage structure detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div class="span2">
+        <img src="images/portfolio/ziro-music-festival/ziro-day-stage-12.jpg" alt="Ziro Music Festival — day stage full view with valley backdrop" loading="lazy" onclick="openLightbox(this.src)" />
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- GALLERY SECTION -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Project Gallery</h2>
-      <p class="section-sub center">Bamboo stage, pavilions, and festival structures at the Ziro Music Festival, Arunachal Pradesh.</p>
-
-      <div class="gallery-masonry">
-
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery - Main bamboo stage structure with festival crowd and Ziro Valley backdrop"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery - Audience pavilion bamboo canopy providing shade at the festival grounds"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery - Close-up of bamboo truss and panel detail on the festival stage facade"></div>
-          </div>
-        </div>
-
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery - Bamboo entrance gateway structure at the Ziro Festival site"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery - Aerial or wide view of bamboo structures across the Ziro festival grounds"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery - Night view of lit bamboo stage structures at the Ziro Music Festival"></div>
-          </div>
-        </div>
-
+<!-- NIGHT STAGE GALLERY -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title center">Night Stage</h2>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-01.jpg" alt="Ziro Music Festival — bamboo night stage lit up" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-02.jpg" alt="Ziro Music Festival — night stage side elevation" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-03.jpg" alt="Ziro Music Festival — night stage structure" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-04.jpg" alt="Ziro Music Festival — night stage canopy detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-05.jpg" alt="Ziro Music Festival — night stage bamboo panels" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-06.jpg" alt="Ziro Music Festival — night stage roof and lighting" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-07.jpg" alt="Ziro Music Festival — night stage truss" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-08.jpg" alt="Ziro Music Festival — night stage audience view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-night-stage-09.jpg" alt="Ziro Music Festival — night stage wide" loading="lazy" onclick="openLightbox(this.src)" />
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SPLIT SECTION -->
-  <section class="section">
-    <div class="container">
-      <div class="split-section">
-        <div class="split-inner">
+<!-- FOOD COURT + VIP LOUNGE -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title center">Food Court &amp; VIP Lounge</h2>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/ziro-music-festival/ziro-food-court-01.jpg" alt="Ziro Music Festival — bamboo food court main structure" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-food-court-02.jpg" alt="Ziro Music Festival — food court canopy" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-food-court-03.jpg" alt="Ziro Music Festival — food court detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-food-court-04.jpg" alt="Ziro Music Festival — food court bamboo columns" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-food-court-05.jpg" alt="Ziro Music Festival — food court interior" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-vip-lounge-01.jpg" alt="Ziro Music Festival — VIP lounge bamboo structure" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-vip-lounge-02.jpg" alt="Ziro Music Festival — VIP lounge interior" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div class="span2">
+        <img src="images/portfolio/ziro-music-festival/ziro-vip-lounge-04.jpg" alt="Ziro Music Festival — VIP lounge wide view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+    </div>
+  </div>
+</section>
 
-          <div class="split-content">
-            <span class="eyebrow">Process &amp; Approach</span>
-            <h2>From Workshop to the Himalayan Foothills</h2>
-            <p>[ Describe the logistical challenge of transporting bamboo structures to Ziro, Arunachal Pradesh — a remote location accessible via limited road connections. The need for components that are flat-packable, lightweight, and designed for rapid assembly by a small crew on-site. ]</p>
-            <p>[ Design considerations for an outdoor festival: structural stability for large open spans that can handle wind loads across the valley, crowd safety requirements for the stage and pavilions, and weather resilience during the festival season. ]</p>
-            <p>[ The aesthetic intention: bamboo as a material that is indigenous to Arunachal Pradesh and resonates deeply with the festival&#x2019;s ethos of celebrating northeastern culture and the natural environment. The visual impact of large bamboo structures against the dramatic Ziro Valley landscape. ]</p>
-            <ul class="features-list">
-              <li>Flat-pack component system for remote transport to Arunachal Pradesh</li>
-              <li>Rapid on-site assembly within tight festival setup timelines</li>
-              <li>Wind-load engineered open-span stage and canopy structures</li>
-              <li>Culturally resonant material choice — bamboo native to the region</li>
-              <li>Reusable or responsibly dismantled post-festival structures</li>
-            </ul>
-          </div>
+<!-- TOURISM PAVILION + VISITORS PLAZA -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title center">Tourism Pavilion &amp; Visitors Plaza</h2>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/ziro-music-festival/ziro-tourism-pavilion-01.jpg" alt="Ziro Music Festival — tourism pavilion bamboo structure" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-tourism-pavilion-02.jpg" alt="Ziro Music Festival — tourism pavilion detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-tourism-pavilion-03.jpg" alt="Ziro Music Festival — tourism pavilion side view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-tourism-pavilion-04.jpg" alt="Ziro Music Festival — pavilion canopy" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-tourism-pavilion-05.jpg" alt="Ziro Music Festival — tourism pavilion facade" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-visitors-plaza-01.jpg" alt="Ziro Music Festival — visitors plaza bamboo trees" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-visitors-plaza-02.jpg" alt="Ziro Music Festival — visitors plaza structure" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-visitors-plaza-03.jpg" alt="Ziro Music Festival — plaza canopy detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-visitors-plaza-05.jpg" alt="Ziro Music Festival — visitors plaza wide view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+    </div>
+  </div>
+</section>
 
-          <div class="split-image">
-            <div class="wf-block h-lg" data-label="Split Image - Assembly or structural detail of Ziro Music Festival bamboo stage construction"></div>
-          </div>
+<!-- POPI SERMIN GALLERY -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title center">Popi Sermin</h2>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-01.jpg" alt="Ziro Music Festival — Popi Sermin bamboo structure" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-02.jpg" alt="Ziro Music Festival — Popi Sermin detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-03.jpg" alt="Ziro Music Festival — Popi Sermin side view" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-04.jpg" alt="Ziro Music Festival — Popi Sermin facade" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-05.jpg" alt="Ziro Music Festival — Popi Sermin canopy" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-06.jpg" alt="Ziro Music Festival — Popi Sermin structure wide" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-09.jpg" alt="Ziro Music Festival — Popi Sermin bamboo column" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-10.jpg" alt="Ziro Music Festival — Popi Sermin truss detail" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/ziro-music-festival/ziro-popi-sermin-12.jpg" alt="Ziro Music Festival — Popi Sermin panel screen" loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+  <img id="lightbox-img" src="" alt="Enlarged project photo" />
+</div>
+<script>
+function openLightbox(src){
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeLightbox();
+});
+</script>
+
+<!-- CONSTRUCTION PROCESS -->
+<section class="section">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Behind the Build</span>
+    <h2 class="section-title center">From Workshop to the Himalayan Foothills</h2>
+    <p class="section-sub center">Site preparation and structural assembly at Ziro, Arunachal Pradesh.</p>
+
+    <div class="process-phase">
+      <h4>On-site &nbsp;·&nbsp; Festival Ground Preparation</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/ziro-music-festival/process/ziro-site-01.jpg" alt="Ziro site — festival ground preparation" loading="lazy" />
+        <img src="images/portfolio/ziro-music-festival/process/ziro-site-02.jpg" alt="Ziro site — early stage assembly" loading="lazy" />
+        <img src="images/portfolio/ziro-music-festival/process/ziro-site-03.jpg" alt="Ziro site — structural frame installation" loading="lazy" />
+        <img src="images/portfolio/ziro-music-festival/process/ziro-site-04.jpg" alt="Ziro site — bamboo component erection" loading="lazy" />
+      </div>
+    </div>
+
+    <div class="process-phase">
+      <h4>Assembly &nbsp;·&nbsp; Final Stages</h4>
+      <div class="process-strip" style="grid-template-columns: repeat(3, 1fr)">
+        <img src="images/portfolio/ziro-music-festival/process/ziro-site-05.jpg" alt="Ziro site — near-complete structure" loading="lazy" />
+        <img src="images/portfolio/ziro-music-festival/process/ziro-site-06.jpg" alt="Ziro site — finishing and cladding" loading="lazy" />
+        <img src="images/portfolio/ziro-music-festival/process/ziro-site-07.jpg" alt="Ziro site — final structural detail" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED PROJECTS -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title center">Related Projects</h2>
+    <p class="section-sub center">More large-span and event bamboo projects from Wonder Grass Initiative.</p>
+    <div class="card-grid cols-3">
+
+      <a href="portfolio-conference-hall.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <img src="images/portfolio/conference-hall/ccd-exterior-2.jpg"
+               alt="Conference cum Dining Hall — Pench Tiger Resort"
+               style="width:100%;height:100%;object-fit:cover" loading="lazy" />
         </div>
-      </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Hospitality</span>
+          <h4 class="card-title">Conference cum Dining Hall</h4>
+          <p class="card-desc">Restfo Pench Tiger Resort, Madhya Pradesh</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-community-space.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <img src="images/portfolio/community-space/cs-card.jpg"
+               alt="Community Space — Snehanchal, Nagpur"
+               style="width:100%;height:100%;object-fit:cover" loading="lazy" />
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Community</span>
+          <h4 class="card-title">Community Space</h4>
+          <p class="card-desc">Snehanchal, Nagpur, Maharashtra</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-outdoor-structures.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <div class="wf-block h-md" data-label="Outdoor Structures — Machaan, Pergola, Gazebo"></div>
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Outdoor Structures</span>
+          <h4 class="card-title">Outdoor Structures</h4>
+          <p class="card-desc">Machaan, Pergola &amp; Gazebo</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- RELATED PROJECTS -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Related Projects</h2>
-      <p class="section-sub center">More large-span and hospitality bamboo projects from Wonder Grass Initiative.</p>
-
-      <div class="card-grid cols-3">
-
-        <a href="portfolio-conference-hall.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project - Conference Hall, Restfo Pench Tiger Resort, Madhya Pradesh"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Hospitality</span>
-            <h4 class="card-title">Conference cum Dining Hall</h4>
-            <p class="card-desc">Pench, Madhya Pradesh</p>
-            <span class="btn-text">View Project &#x2192;</span>
-          </div>
-        </a>
-
-        <a href="portfolio-machaan.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project - Machaan, Chennai, Tamil Nadu"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Hospitality / Dining</span>
-            <h4 class="card-title">Machaan</h4>
-            <p class="card-desc">Chennai, Tamil Nadu</p>
-            <span class="btn-text">View Project &#x2192;</span>
-          </div>
-        </a>
-
-        <a href="portfolio-outdoor-structures.html" class="portfolio-card">
-          <div class="portfolio-card-img">
-            <div class="wf-block h-md" data-label="Related Project - Outdoor Structures Collection"></div>
-          </div>
-          <div class="portfolio-card-body">
-            <span class="card-tag">Outdoor / Landscape</span>
-            <h4 class="card-title">Outdoor Structures</h4>
-            <p class="card-desc">Various Locations, India</p>
-            <span class="btn-text">View Project &#x2192;</span>
-          </div>
-        </a>
-
-      </div>
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="container cta-banner-inner">
+    <div class="cta-banner-text">
+      <h2>Planning a festival or event structure?</h2>
+      <p>We design and deliver bamboo stages, pavilions, and event structures anywhere in India — on time, on budget.</p>
     </div>
-  </section>
-
-  <!-- CTA BANNER -->
-  <section class="cta-banner bg-green-dark">
-    <div class="container cta-banner-inner">
-      <div class="cta-banner-text">
-        <h2>Planning a festival or event structure?</h2>
-        <p>We design and deliver bamboo stages, pavilions, and event structures anywhere in India — on time, on budget.</p>
-      </div>
-      <div class="cta-banner-actions">
-        <a href="contact.html" class="btn btn-primary">Get a Quote</a>
-        <a href="portfolio-outdoor-structures.html" class="btn btn-outline-white">See More Projects</a>
-      </div>
+    <div class="cta-banner-actions">
+      <a href="contact.html" class="btn btn-white">Get a Quote</a>
+      <a href="portfolio-conference-hall.html" class="btn btn-outline-white">See More Projects</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- NEWSLETTER -->
-  <section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
+<!-- NEWSLETTER -->
+<section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">Pioneering Bamboo for a Sustainable India</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall</a></li><li><a href="portfolio-community-space.html">Community Space</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
+<!-- FOOTER -->
+<footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">the wonder that works.</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall</a></li><li><a href="portfolio-community-space.html">Community Space</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
 
 </body>
 </html>
