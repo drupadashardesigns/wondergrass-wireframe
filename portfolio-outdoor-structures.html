@@ -3,19 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Outdoor Structures – Bamboo Pergolas, Pavilions & Shelters | Wonder Grass Initiative</title>
+  <title>Outdoor Structures – Machaan, Pergola & Pavilions | Wonder Grass Initiative</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .port-hero-img {
+      width: 100%;
+      height: clamp(320px, 55vw, 640px);
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-top: 2rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+      transition: opacity .2s;
+    }
+    .gallery-grid img:hover { opacity: .88; cursor: zoom-in; }
+    .gallery-grid .span2 { grid-column: span 2; }
+    .gallery-grid .span2 img { aspect-ratio: 16/9; }
+    .process-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+    .process-strip img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+    }
+    .process-phase { margin-bottom: 2.5rem; }
+    .process-phase h4 {
+      font-family: var(--font-ui);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem; right: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid .span2 { grid-column: span 1; }
+      .gallery-grid .span2 img { aspect-ratio: 4/3; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .process-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ANNOUNCEMENT BAR -->
-  <div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote →</a></div>
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">Sustainable Bamboo Solutions — Built for India, Built for the Planet &nbsp;|&nbsp; <a href="contact.html" style="color:var(--gold);text-decoration:underline">Get a Quote →</a></div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-inner container">
-      <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd.</span></div></a>
-          <nav class="main-nav">
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a href="index.html" class="logo"><div class="logo-mark">WG</div><div class="logo-text"><strong>Wonder Grass Initiative</strong><span>Pvt. Ltd. &nbsp;·&nbsp; <em>the wonder that works.</em></span></div></a>
+    <nav class="main-nav">
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
@@ -42,10 +128,14 @@
         <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </nav>
-      <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
-    </div>
-  </header>
-<!-- MOBILE NAV OVERLAY -->
+    <div class="header-actions"><a href="contact.html" class="btn btn-primary header-cta sm">Get a Quote</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-header">
@@ -94,32 +184,25 @@
   var nav    = document.getElementById('mobileNav');
   var overlay= document.getElementById('mobileNavOverlay');
   var body   = document.body;
-
   function openNav(){
-    nav.classList.add('open');
-    overlay.classList.add('open');
+    nav.classList.add('open'); overlay.classList.add('open');
     body.style.overflow = 'hidden';
     toggle.setAttribute('aria-expanded','true');
     nav.setAttribute('aria-hidden','false');
   }
   function closeNav(){
-    nav.classList.remove('open');
-    overlay.classList.remove('open');
+    nav.classList.remove('open'); overlay.classList.remove('open');
     body.style.overflow = '';
     toggle.setAttribute('aria-expanded','false');
     nav.setAttribute('aria-hidden','true');
   }
-
   toggle.addEventListener('click', openNav);
   close.addEventListener('click', closeNav);
   overlay.addEventListener('click', closeNav);
-
-  // Sub-menu toggles
   document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(btn){
     btn.addEventListener('click', function(){
       var sub = this.nextElementSibling;
       var isOpen = sub.classList.contains('open');
-      // Close all
       document.querySelectorAll('.mobile-nav-sub').forEach(function(s){ s.classList.remove('open'); });
       document.querySelectorAll('.mobile-nav-group-toggle').forEach(function(b){ b.classList.remove('active'); });
       if(!isOpen){ sub.classList.add('open'); this.classList.add('active'); }
@@ -128,318 +211,309 @@
 })();
 </script>
 
-  <!-- PAGE HERO -->
-  <section class="page-hero tall">
-    <div class="page-hero-bg wf-block h-banner" data-label="Hero Image – Outdoor bamboo structures collection: pergola, pavilion, and shade shelter"></div>
-    <div class="page-hero-overlay"></div>
-    <div class="page-hero-content container">
-      <span class="eyebrow">Portfolio — Outdoor / Landscape</span>
-      <h1>Outdoor Structures</h1>
-      <p>A showcase of standalone outdoor bamboo structures — pergolas, shelters, pavilions, and landscape elements across various sites.</p>
-    </div>
-  </section>
+<!-- HERO -->
+<div style="background:#1a1a1a">
+  <img
+    src="images/portfolio/outdoor-structures/machaan-arun-jain-01.jpg"
+    alt="Outdoor Structures — bamboo machaan elevated structure, Chennai"
+    class="port-hero-img"
+    loading="eager"
+  />
+</div>
 
-  <!-- BREADCRUMB -->
-  <section class="section compact">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="index.html">Home</a> ›
-        <a href="#">Portfolio</a> ›
-        <span>Outdoor Structures</span>
-      </nav>
-    </div>
-  </section>
+<!-- BREADCRUMB -->
+<section class="section compact">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="#">Portfolio</a> ›
+      <span>Outdoor Structures</span>
+    </nav>
+  </div>
+</section>
 
-  <!-- INTRO SECTION -->
-  <section class="section">
-    <div class="container container-sm">
-      <h2 class="section-title center">Outdoor Bamboo Structures</h2>
-      <p class="section-sub center">A collection of standalone outdoor bamboo structures — from elevated dining platforms and garden pergolas to sheltered gazebos — built across various sites in India. Each piece is custom-designed, workshop-fabricated, and assembled on site.</p>
-    </div>
-  </section>
+<!-- PROJECT OVERVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="project-layout">
 
-  <!-- THREE FEATURED STRUCTURES -->
-  <section class="section">
-    <div class="container">
-      <span class="eyebrow" style="display:block;text-align:center">Featured Structures</span>
-      <h2 class="section-title center" style="margin-bottom:2.5rem">Machaan, Gazebo &amp; Pergola</h2>
+      <div class="project-main">
+        <span class="eyebrow">Portfolio — Outdoor Structures</span>
+        <h1 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin:.5rem 0 1.25rem">Outdoor Structures</h1>
 
-      <div class="card-grid cols-3" style="margin-bottom:3rem">
+        <p>A collection of standalone outdoor bamboo structures — machaans, pergolas, and pavilions — built across various sites in India. Each piece is custom-designed for its site, client, and climate, workshop-fabricated at Nagpur, and assembled on location.</p>
 
-        <!-- Machaan -->
-        <div class="card">
-          <div class="card-img wf-block h-md" data-label="Machaan — Elevated bamboo dining and leisure structure, Chennai"></div>
-          <div class="card-body">
-            <p class="card-tag">Elevated Structure</p>
-            <h3 class="card-title">Machaan</h3>
-            <p class="card-desc">An elevated bamboo dining and leisure platform in Chennai — reimagining the traditional forest machaan as a contemporary outdoor structure. Engineered for load-bearing safety at height, with open sides for natural ventilation in the coastal climate.</p>
-            <div style="margin-top:1rem;font-family:var(--font-ui);font-size:.82rem;color:var(--muted)">
-              <div><strong>Location:</strong> Chennai, Tamil Nadu</div>
-              <div><strong>Type:</strong> Elevated Dining / Leisure</div>
-              <div><strong>Year:</strong> [ Year ]</div>
-            </div>
-          </div>
+        <p>From elevated dining platforms inspired by the traditional forest machaan, to overhead pergola structures that define outdoor living spaces, Wonder Grass brings the same engineering rigour and material craft to outdoor structures as it does to its larger buildings.</p>
+
+        <ul class="features-list" style="margin-top:1.25rem">
+          <li>Custom design for each site and client brief</li>
+          <li>Full off-site prefabrication for quality and speed</li>
+          <li>Treated bamboo engineered for outdoor durability</li>
+          <li>Steel-reinforced base connections for structural stability</li>
+          <li>Delivered and assembled anywhere across India</li>
+        </ul>
+      </div>
+
+      <aside class="project-info-box">
+        <h4>Project Details</h4>
+        <div class="project-info-row">
+          <span class="project-info-label">Project Type</span>
+          <span class="project-info-value">Machaan, Pergola &amp; Pavilion</span>
         </div>
-
-        <!-- Gazebo -->
-        <div class="card">
-          <div class="card-img wf-block h-md" data-label="Gazebo — Bamboo standalone garden pavilion / sit-out structure"></div>
-          <div class="card-body">
-            <p class="card-tag">Garden Structure</p>
-            <h3 class="card-title">Gazebo</h3>
-            <p class="card-desc">A standalone bamboo gazebo designed as a sheltered garden sit-out — intimate, naturally shaded, and built to sit lightly in the landscape. Suitable for private gardens, resort courtyards, and farm estates.</p>
-            <div style="margin-top:1rem;font-family:var(--font-ui);font-size:.82rem;color:var(--muted)">
-              <div><strong>Location:</strong> [ Location ]</div>
-              <div><strong>Type:</strong> Garden Pavilion / Sit-Out</div>
-              <div><strong>Year:</strong> [ Year ]</div>
-            </div>
-          </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Locations</span>
+          <span class="project-info-value">Chennai, Tamil Nadu &amp; Various</span>
         </div>
-
-        <!-- Pergola -->
-        <div class="card">
-          <div class="card-img wf-block h-md" data-label="Pergola — Bamboo overhead lattice pergola structure in garden or terrace setting"></div>
-          <div class="card-body">
-            <p class="card-tag">Overhead Structure</p>
-            <h3 class="card-title">Pergola</h3>
-            <p class="card-desc">A bamboo pergola providing dappled shade and structure to an outdoor walkway or terrace. Designed with an open bamboo lattice overhead — defining space without enclosing it, and creating a natural transition between indoor and outdoor.</p>
-            <div style="margin-top:1rem;font-family:var(--font-ui);font-size:.82rem;color:var(--muted)">
-              <div><strong>Location:</strong> [ Location ]</div>
-              <div><strong>Type:</strong> Pergola / Overhead Shade</div>
-              <div><strong>Year:</strong> [ Year ]</div>
-            </div>
-          </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Scope</span>
+          <span class="project-info-value">Design, Fabrication &amp; On-site Assembly</span>
         </div>
+        <div class="project-info-row">
+          <span class="project-info-label">Products Used</span>
+          <span class="project-info-value">Bamboo Building Components, Panels &amp; Screens</span>
+        </div>
+        <a href="contact.html" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center">Enquire About This Project</a>
+      </aside>
 
+    </div>
+  </div>
+</section>
+
+<!-- MACHAAN — ARUN JAIN, CHENNAI -->
+<section class="section bg-light">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Project Gallery</span>
+    <h2 class="section-title center">Machaan — Arun Jain Residence, Chennai</h2>
+    <p class="section-sub center">An elevated bamboo dining and leisure platform in Chennai — a contemporary reinterpretation of the traditional forest machaan.</p>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/outdoor-structures/machaan-arun-jain-02.jpg"
+             alt="Machaan — Arun Jain Chennai — elevated bamboo platform wide view"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-arun-jain-03.jpg"
+             alt="Machaan — bamboo column and railing detail"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-arun-jain-04.jpg"
+             alt="Machaan — elevated platform from ground level"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-arun-jain-05.jpg"
+             alt="Machaan — bamboo roof canopy and structure"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-arun-jain-06.jpg"
+             alt="Machaan — Arun Jain Chennai — full view"
+             loading="lazy" onclick="openLightbox(this.src)" />
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- GALLERY SECTION: 8 items, mix of tall and wide -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Gallery</h2>
-      <p class="section-sub center">A selection of outdoor bamboo structures built across various sites in India.</p>
-
-      <div class="gallery-masonry">
-
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Bamboo pergola structure in a resort or garden setting, overhead view of lattice roof"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Bamboo garden pavilion with open sides and conical or pitched roof"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Bamboo entrance gateway structure with arched or portal frame design"></div>
-          </div>
-        </div>
-
-        <div class="g-item wide">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Wide panoramic bamboo shade shelter or canopy at an outdoor event or farm venue"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Bamboo walkway or corridor structure connecting two buildings with overhead cover"></div>
-          </div>
-        </div>
-
-        <div class="g-item tall">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Tall bamboo tower or landmark structure used as a landscape feature or viewpoint"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Bamboo gazebo or sit-out in a private garden or resort landscape"></div>
-          </div>
-        </div>
-
-        <div class="g-item">
-          <div class="g-item-inner">
-            <div class="wf-block h-full" data-label="Gallery – Detail of bamboo joint, column base, and craftsmanship on an outdoor structure"></div>
-          </div>
-        </div>
-
+<!-- MACHAAN — GODREJ -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title center">Machaan — Godrej</h2>
+    <p class="section-sub center">A bamboo machaan built for Godrej — an elevated outdoor structure designed for leisure and landscape.</p>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/outdoor-structures/machaan-godrej-01.jpg"
+             alt="Godrej Machaan — bamboo elevated structure wide view"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-godrej-02.jpg"
+             alt="Godrej Machaan — bamboo column and platform detail"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-godrej-03.jpg"
+             alt="Godrej Machaan — side elevation"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-godrej-04.jpg"
+             alt="Godrej Machaan — roof and canopy structure"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-godrej-05.jpg"
+             alt="Godrej Machaan — bamboo railing and staircase"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/machaan-godrej-06.jpg"
+             alt="Godrej Machaan — full exterior view"
+             loading="lazy" onclick="openLightbox(this.src)" />
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CATEGORIES SECTION: 4 feature cards -->
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title center">Structure Categories</h2>
-      <p class="section-sub center">We design and build a wide range of outdoor bamboo structures. Explore the categories below.</p>
-
-      <div class="card-grid cols-4">
-
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Category Card Image – Bamboo Pergolas: overhead lattice structure in garden or terrace"></div>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title">Pergolas</h4>
-            <p class="card-desc">[ Open-sided overhead bamboo lattice structures for gardens, terraces, walkways, and outdoor dining areas. Customisable in span, height, and roof pattern. ]</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Category Card Image – Garden Pavilions: enclosed or semi-enclosed bamboo pavilion in landscape setting"></div>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title">Garden Pavilions</h4>
-            <p class="card-desc">[ Standalone bamboo pavilions for resorts, estates, and public parks — designed for leisure, events, or as focal landscape features. ]</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Category Card Image – Entrance Gateways: bamboo portal or arched entrance structure"></div>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title">Entrance Gateways</h4>
-            <p class="card-desc">[ Dramatic bamboo gateway and entrance structures for resorts, farms, institutions, and event venues — creating a strong first impression. ]</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Category Card Image – Shade Structures: large bamboo canopy or sail shade for outdoor areas"></div>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title">Shade Structures</h4>
-            <p class="card-desc">[ Large-span bamboo shade canopies and shelters for outdoor seating, parking, market areas, schools, and public spaces across India. ]</p>
-          </div>
-        </div>
-
+<!-- PERGOLA — GODREJ -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title center">Pergola — Godrej</h2>
+    <p class="section-sub center">A bamboo pergola providing dappled shade and structure — defining outdoor space without enclosing it.</p>
+    <div class="gallery-grid">
+      <div class="span2">
+        <img src="images/portfolio/outdoor-structures/pergola-godrej-01.jpg"
+             alt="Godrej Pergola — bamboo overhead lattice structure wide view"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/pergola-godrej-02.jpg"
+             alt="Godrej Pergola — bamboo column and beam detail"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/pergola-godrej-03.jpg"
+             alt="Godrej Pergola — overhead lattice roof detail"
+             loading="lazy" onclick="openLightbox(this.src)" />
+      </div>
+      <div>
+        <img src="images/portfolio/outdoor-structures/pergola-godrej-04.jpg"
+             alt="Godrej Pergola — full view with landscape"
+             loading="lazy" onclick="openLightbox(this.src)" />
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- MINI PROJECT CARDS: 4 featured projects within outdoor structures -->
-  <section class="section bg-light">
-    <div class="container">
-      <h2 class="section-title center">Featured Projects</h2>
-      <p class="section-sub center">Select outdoor structure projects from our portfolio — each a unique response to site, client, and context.</p>
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+  <img id="lightbox-img" src="" alt="Enlarged project photo" />
+</div>
+<script>
+function openLightbox(src){
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeLightbox();
+});
+</script>
 
-      <div class="card-grid cols-2">
+<!-- CONSTRUCTION PROCESS -->
+<section class="section">
+  <div class="container">
+    <span class="eyebrow" style="display:block;text-align:center">Behind the Build</span>
+    <h2 class="section-title center">Assembly in Action</h2>
+    <p class="section-sub center">Work-in-progress shots from the Machaan projects — off-site fabrication and on-site assembly.</p>
 
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Mini Project Card – Conference Hall outdoor bamboo elements, Pench Tiger Resort, Madhya Pradesh"></div>
-          </div>
-          <div class="card-body">
-            <span class="card-tag">Hospitality</span>
-            <h4 class="card-title">Outdoor Structures – Pench Tiger Resort</h4>
-            <p class="card-meta">Pench, Madhya Pradesh</p>
-            <p class="card-desc">[ Brief description of outdoor bamboo elements — pathways, entrance features, or pergolas — built as part of the Pench Tiger Resort project. ]</p>
-            <a href="portfolio-conference-hall.html" class="btn-text">View Project Details →</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Mini Project Card – Outdoor bamboo structures at Snehanchal Community Space, Nagpur"></div>
-          </div>
-          <div class="card-body">
-            <span class="card-tag">Community</span>
-            <h4 class="card-title">Outdoor Structures – Snehanchal, Nagpur</h4>
-            <p class="card-meta">Nagpur, Maharashtra</p>
-            <p class="card-desc">[ Brief description of outdoor elements built at the Snehanchal community space — shaded gathering areas, entrance gateway, or landscape features. ]</p>
-            <a href="portfolio-community-space.html" class="btn-text">View Project Details →</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Mini Project Card – Festival outdoor structures and pavilions at Ziro Music Festival, Arunachal Pradesh"></div>
-          </div>
-          <div class="card-body">
-            <span class="card-tag">Events &amp; Festivals</span>
-            <h4 class="card-title">Outdoor Structures – Ziro Music Festival</h4>
-            <p class="card-meta">Ziro, Arunachal Pradesh</p>
-            <p class="card-desc">[ Brief description of outdoor pavilions, shade canopies, and landscape bamboo elements built for the Ziro Music Festival grounds. ]</p>
-            <a href="portfolio-ziro-music-festival.html" class="btn-text">View Project Details →</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-img">
-            <div class="wf-block h-sm" data-label="Mini Project Card – Machaan outdoor bamboo elements and landscape structures, Chennai"></div>
-          </div>
-          <div class="card-body">
-            <span class="card-tag">Hospitality / Dining</span>
-            <h4 class="card-title">Outdoor Structures – Machaan, Chennai</h4>
-            <p class="card-meta">Chennai, Tamil Nadu</p>
-            <p class="card-desc">[ Brief description of the outdoor landscape elements, approach pergola, or ground-level bamboo features associated with the Machaan project in Chennai. ]</p>
-            <a href="portfolio-machaan.html" class="btn-text">View Project Details →</a>
-          </div>
-        </div>
-
+    <div class="process-phase">
+      <h4>Arun Jain Machaan &nbsp;·&nbsp; Construction Sequence</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/outdoor-structures/process/machaan-arun-jain-wip-01.jpg"
+             alt="Arun Jain Machaan WIP — foundation and column base" loading="lazy" />
+        <img src="images/portfolio/outdoor-structures/process/machaan-arun-jain-wip-02.jpg"
+             alt="Arun Jain Machaan WIP — structural frame erection" loading="lazy" />
+        <img src="images/portfolio/outdoor-structures/process/machaan-arun-jain-wip-03.jpg"
+             alt="Arun Jain Machaan WIP — platform and floor assembly" loading="lazy" />
+        <img src="images/portfolio/outdoor-structures/process/machaan-arun-jain-wip-04.jpg"
+             alt="Arun Jain Machaan WIP — railing and staircase fitting" loading="lazy" />
       </div>
     </div>
-  </section>
 
-  <!-- SPLIT SECTION: Approach -->
-  <section class="section">
-    <div class="container">
-      <div class="split-section">
-        <div class="split-inner">
+    <div class="process-phase">
+      <h4>Godrej Machaan &nbsp;·&nbsp; Construction Sequence</h4>
+      <div class="process-strip">
+        <img src="images/portfolio/outdoor-structures/process/machaan-godrej-wip-01.jpg"
+             alt="Godrej Machaan WIP — column erection" loading="lazy" />
+        <img src="images/portfolio/outdoor-structures/process/machaan-godrej-wip-02.jpg"
+             alt="Godrej Machaan WIP — beam installation" loading="lazy" />
+        <img src="images/portfolio/outdoor-structures/process/machaan-godrej-wip-03.jpg"
+             alt="Godrej Machaan WIP — platform assembly" loading="lazy" />
+        <img src="images/portfolio/outdoor-structures/process/machaan-godrej-wip-04.jpg"
+             alt="Godrej Machaan WIP — roof structure" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
 
-          <div class="split-content">
-            <span class="eyebrow">Our Approach</span>
-            <h2>Custom Designed, Precision Built</h2>
-            <p>[ Describe the Wonder Grass approach to outdoor structures: every structure begins with an understanding of the site — the climate, soil, surrounding landscape, how people will move through and use the space, and what visual character the client wants to create. ]</p>
-            <p>[ The design process: sketches to CAD drawings, material specification, structural engineering review, and client sign-off before fabrication begins. All components are fabricated at the Wonder Grass workshop using seasoned, treated bamboo, then transported to site for assembly. ]</p>
-            <p>[ Durability and maintenance: how Wonder Grass treats bamboo for outdoor use — preservative treatment, UV-resistant finishes, steel base connections — to ensure structures that perform in Indian climates for years with minimal maintenance. ]</p>
-            <ul class="features-list">
-              <li>Site-specific custom design for every project</li>
-              <li>Full off-site prefabrication for quality control</li>
-              <li>Treated bamboo engineered for outdoor durability</li>
-              <li>Steel-reinforced base connections for structural stability</li>
-              <li>Delivered and assembled anywhere across India</li>
-            </ul>
-          </div>
+<!-- RELATED PROJECTS -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title center">Related Projects</h2>
+    <p class="section-sub center">More Wonder Grass projects across hospitality, community, and events.</p>
+    <div class="card-grid cols-3">
 
-          <div class="split-image">
-            <div class="wf-block h-lg" data-label="Split Image – Workshop fabrication or site installation of an outdoor bamboo structure"></div>
-          </div>
-
+      <a href="portfolio-conference-hall.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <img src="images/portfolio/conference-hall/ccd-exterior-2.jpg"
+               alt="Conference cum Dining Hall — Pench Tiger Resort"
+               style="width:100%;height:100%;object-fit:cover" loading="lazy" />
         </div>
-      </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Hospitality</span>
+          <h4 class="card-title">Conference cum Dining Hall</h4>
+          <p class="card-desc">Restfo Pench Tiger Resort, Madhya Pradesh</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-community-space.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <img src="images/portfolio/community-space/cs-card.jpg"
+               alt="Community Space — Snehanchal, Nagpur"
+               style="width:100%;height:100%;object-fit:cover" loading="lazy" />
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Community</span>
+          <h4 class="card-title">Community Space</h4>
+          <p class="card-desc">Snehanchal, Nagpur, Maharashtra</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
+      <a href="portfolio-ziro-music-festival.html" class="portfolio-card">
+        <div class="portfolio-card-img">
+          <img src="images/portfolio/ziro-music-festival/ziro-card.jpg"
+               alt="Ziro Music Festival — Arunachal Pradesh"
+               style="width:100%;height:100%;object-fit:cover" loading="lazy" />
+        </div>
+        <div class="portfolio-card-body">
+          <span class="card-tag">Events &amp; Festivals</span>
+          <h4 class="card-title">Ziro Music Festival</h4>
+          <p class="card-desc">Ziro, Arunachal Pradesh</p>
+          <span class="btn-text">View Project →</span>
+        </div>
+      </a>
+
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CTA BANNER -->
-  <section class="cta-banner bg-green-dark">
-    <div class="container cta-banner-inner">
-      <div class="cta-banner-text">
-        <h2>Need an outdoor bamboo structure?</h2>
-        <p>Pergola, pavilion, gateway, or shade canopy — tell us about your site and we'll design the perfect bamboo structure for it.</p>
-      </div>
-      <div class="cta-banner-actions">
-        <a href="contact.html" class="btn btn-primary">Get a Quote</a>
-        <a href="product-bamboo-building-components.html" class="btn btn-outline-white">See Building Components</a>
-      </div>
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="container cta-banner-inner">
+    <div class="cta-banner-text">
+      <h2>Need an outdoor bamboo structure?</h2>
+      <p>Machaan, pergola, pavilion, or shade canopy — tell us about your site and we'll design the perfect bamboo structure for it.</p>
     </div>
-  </section>
+    <div class="cta-banner-actions">
+      <a href="contact.html" class="btn btn-white">Get a Quote</a>
+      <a href="portfolio-conference-hall.html" class="btn btn-outline-white">See More Projects</a>
+    </div>
+  </div>
+</section>
 
-  <!-- NEWSLETTER -->
-  <section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
+<!-- NEWSLETTER -->
+<section class="newsletter-section"><div class="container newsletter-inner"><h3>Stay Updated with Wonder Grass</h3><p>Get project updates, new product launches, and sustainability insights in your inbox.</p><form class="newsletter-form"><input type="email" placeholder="Enter your email address" /><button type="submit" class="btn btn-primary">Subscribe</button></form></div></section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">Pioneering Bamboo for a Sustainable India</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall</a></li><li><a href="portfolio-community-space.html">Community Space</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
+<!-- FOOTER -->
+<footer class="site-footer"><div class="container footer-inner"><div class="footer-brand"><div class="footer-logo-mark">WG</div><h4>Wonder Grass Initiative Pvt. Ltd.</h4><p class="tagline">the wonder that works.</p><p>Designing and building high-quality bamboo structures across India.</p><div class="footer-social"><a href="#">[FB]</a><a href="#">[IG]</a><a href="#">[YT]</a><a href="#">[LI]</a></div></div><div class="footer-col"><h5>Products</h5><ul><li><a href="product-bamboo-building-components.html">Building Components</a></li><li><a href="product-bamboo-poly-shed-net.html">Poly-Shed Net</a></li><li><a href="product-bamboo-farm-shed.html">Farm Shed (BIY Kit)</a></li><li><a href="product-eco-lite.html">Eco-Lite Units</a></li><li><a href="product-b-pod-cottages.html">B-POD Cottages</a></li></ul></div><div class="footer-col"><h5>Portfolio</h5><ul><li><a href="portfolio-conference-hall.html">Conference Hall</a></li><li><a href="portfolio-community-space.html">Community Space</a></li><li><a href="portfolio-ziro-music-festival.html">Ziro Music Festival</a></li><li><a href="portfolio-farm-house.html">Farm House</a></li><li><a href="portfolio-outdoor-structures.html">Outdoor Structures</a></li></ul></div><div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="bamboo-lab.html">Bamboo Lab</a></li><li><a href="about.html#why-bamboo">Why Bamboo?</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="contact.html">Get a Quote</a></li><li><a href="contact.html">Enquire Now</a></li></ul></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><p>&copy; 2025 Wonder Grass Initiative Pvt. Ltd. All rights reserved.</p><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div></div></footer>
 
 </body>
 </html>
