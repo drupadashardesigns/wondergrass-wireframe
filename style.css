@@ -480,6 +480,34 @@ h1,h2,h3,h4,h5,h6 { line-height: 1.25; }
 .divider-text::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid var(--border); }
 .divider-text span { position: relative; background: #fff; padding: 0 1.5rem; font-family: var(--font-ui); font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 
+
+/* ── Product Section Layouts ──────────────────────────── */
+/* These replace inline display:grid styles so breakpoints can control them */
+.product-layout-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+.product-layout-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+.inclusions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+}
+.dim-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 /* =====================================================
    RESPONSIVE & FLUID SYSTEM — DESKTOP FIRST
    ===================================================== */
@@ -754,11 +782,27 @@ button, a { touch-action: manipulation; }
   .footer-col ul li a   { font-size: .8rem; }
 }
 
+
+/* ── Input / Form Mobile UX ───────────────────────────── */
+/* Prevent iOS zoom on focus (inputs must be ≥16px on mobile) */
+@media (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important; /* prevents iOS auto-zoom */
+  }
+}
+
 /* =====================================================
    SPECS TABLE — STACKED ON MOBILE
    Two-column tables become labelled rows, no side-scroll
    ===================================================== */
 @media (max-width: 600px) {
+
+  /* Product page layouts → single column */
+  .product-layout-3col,
+  .product-layout-2col,
+  .inclusions-grid       { grid-template-columns: 1fr; gap: 1.25rem; }
+  .dim-pair              { grid-template-columns: 1fr 1fr; gap: .75rem; } /* keep 2col — small boxes */
+
   /* Remove overflow wrapper, let table stack instead */
   [style*="overflow-x:auto"] { overflow-x: visible !important; }
 
@@ -772,6 +816,8 @@ button, a { touch-action: manipulation; }
     letter-spacing: .06em; color: var(--muted); padding-bottom: 0;
   }
   .specs-table td:last-child  { color: var(--dark); padding-top: .1rem; }
+
+  .scroll-hint { display: block !important; }
 
   /* Compare table: can't stack easily, keep scroll but smaller */
   .compare-table        { font-size: .75rem; }
