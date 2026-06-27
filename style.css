@@ -829,3 +829,47 @@ button, a { touch-action: manipulation; }
   }
 }
 
+
+/* ── MOBILE AUDIT FIXES ─────────────────────────────────── */
+
+/* Split sections: stack on mobile */
+@media (max-width: 768px) {
+  .split-section .split-grid    { grid-template-columns: 1fr !important; }
+  .split-section .split-image   { min-height: 220px; order: -1; }
+
+  /* Fix inline fixed-width containers */
+  [style*="max-width:820px"],
+  [style*="max-width:680px"],
+  [style*="max-width:560px"]    { max-width: 100% !important; width: 100% !important; }
+
+  /* Why-grid override (about page inline style) */
+  .why-grid[style]              { grid-template-columns: repeat(2,1fr) !important; }
+
+  /* Portfolio inline grids */
+  [style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: repeat(2,1fr) !important; }
+
+  /* Poly-shed inline photo grids */
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns:repeat(2,1fr)"]   { grid-template-columns: 1fr !important; }
+
+  /* Bamboo panels inline grid */
+  .product-section [style*="grid-template-columns:repeat(2,1fr)"] { grid-template-columns: 1fr !important; }
+
+  /* Team photos: smaller on phone */
+  img.team-photo                { width: 110px !important; height: 110px !important; }
+
+  /* Why Bamboo icons: keep fixed size */
+  .section.bg-green-dark img[style*="80px"] { width: 64px !important; height: 64px !important; }
+}
+
+@media (max-width: 480px) {
+  /* Collapse all inline 2-col grids to 1-col on small phones */
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns:repeat(2,1fr)"],
+  [style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
+
+  .why-grid[style]              { grid-template-columns: 1fr !important; }
+
+  /* Testimonial card max-width */
+  [style*="max-width:680px"]    { max-width: 100% !important; }
+}
